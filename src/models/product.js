@@ -25,4 +25,23 @@ function listProducts(data, cb) { // this function is used to get the all produc
     });
 }
 
-module.exports = {listProducts};
+function addProduct(data, cb) {
+    var sql = `Insert into 
+                products(NAME, Description, Price, VendorID, CategoryID, CreatedAt, UpdatedAt) 
+                values(?, ?, ?, ?, ?, now(), now())`; // instead of using double quotes "" you can use `` for better readability
+
+    var values = [];
+    values.push(data.name);
+    values.push(data.description);
+    values.push(data.price);
+    values.push(data.vendorId);
+    values.push(data.categoryId);
+
+    sqlConnection.executeQuery(sql, values, function(err, result) {
+        cb(err, result);
+    });
+
+
+}
+
+module.exports = {listProducts, addProduct};
