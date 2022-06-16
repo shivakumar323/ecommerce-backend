@@ -1,6 +1,6 @@
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const Config = require("../constants/backendConfig");
-var pool = mysql.createPool(Config.mysql.prod);
+var pool = mysql.createPool(Config.mysql.local);
 
 module.exports = {
 	executeQuery: function (sql, data, callback) {
