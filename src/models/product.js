@@ -6,6 +6,19 @@ function listProducts(data, cb) { // this function is used to get the all produc
     if(data.categoryID) {
         sql += " where CategoryID = ?";
         values.push(data.categoryID);
+
+        if(data.minPrice) {
+            sql += " and Price >= ?";
+            values.push(data.minPrice);
+        }
+    }
+    else if(data.minPrice) {
+        sql += " where Price >= ?";
+        values.push(data.minPrice);
+    }
+    else if(data.maxPrice) {
+        sql += " where Price <= ?";
+        values.push(data.maxPrice);
     }
     sqlConnection.executeQuery(sql, values, function(err, result) {
         cb(err, result);
