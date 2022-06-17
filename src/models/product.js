@@ -25,6 +25,7 @@ function listProducts(data, cb) { // this function is used to get the all produc
     });
 }
 
+// function for adding product 
 function addProduct(data, cb) {
     var sql = `Insert into 
                 products(NAME, Description, Price, VendorID, CategoryID, CreatedAt, UpdatedAt) 
