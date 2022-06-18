@@ -7,7 +7,7 @@ var cors = require('cors');
 const { httpCodes, httpColorCodes } = require("./src/constants/backendConfig");
 
 //var indexRouter = require('./routes/api/v1/index');
-var apiRouter = require('./routes/api');
+var apiRouter = require('./routes/api/index');
 
 var app = express();
 
