@@ -1,5 +1,3 @@
-// const { use } = require('bcrypt/promises');
-// const { send } = require('express/lib/response');
 const user = require('../models/user');
 
 function signUp(req, res) {
@@ -40,4 +38,35 @@ function signUp(req, res) {
     }
 }
 
-module.exports = {signUp};
+function login(req, res) {
+    let data = req.body;
+    let responseData = {
+        success: false,
+        msg: "Invalid details for login please check your login credentials"
+    }
+    if(data.username && data.password) {
+        user.login(data, function(err, result) {
+            if(err) {
+                res.status(500).send(responseData);
+            }
+            if(result.length == 0) {
+                responseData.msg = "invalid credentials";
+                res.status(500).send(responseData);
+            }
+            responseData.success = true;
+            responseData.msg = "successfully logged in"
+            responseData.data = {
+                username: result[0].Username,
+                userID: result[0].ID,
+                userType: result[0].UserType
+            };
+            return res.status(200).send(responseData);
+        })
+    }
+    else {
+        return res.status(400).send(responseData);
+    }
+
+}
+
+module.exports = {signUp, login};

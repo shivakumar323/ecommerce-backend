@@ -25,5 +25,18 @@ function getUserSignupDetails(data, cb) {
     })
 }
 
+function login(data, cb) {
+    var sql = `select ID as userID, Username, UserType
+               from users
+               where Username = ? and Password = ?`;
+    var values = []
+    values.push(data.username);
+    values.push(data.password);
 
-module.exports = {signUp, getUserSignupDetails};
+    sqlConnection.executeQuery(sql, values, function(err, result) {
+        cb(err, result);
+    })
+}
+
+
+module.exports = {signUp, getUserSignupDetails, login};

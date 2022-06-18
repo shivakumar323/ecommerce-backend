@@ -9,5 +9,6 @@ router.post("/product/all", productController.listProducts);
 router.post("/product/add", productController.addProduct);
 router.post("/order/all", orderController.listOrders);
 router.post("/user/signup", userController.signUp);
+router.post("/user/signin", userController.login);
 
 module.exports = router;
