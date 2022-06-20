@@ -1,5 +1,6 @@
 const sqlConnection = require('../services/sqlConnection');
 var bcrypt = require('bcryptjs');
+const auth = require('../util/auth');
 
 
 function signUp(data, cb) {
@@ -71,11 +72,13 @@ function strongSignIn(data, cb) {
         console.log(result);
         const isValidPassword = bcrypt.compareSync(data.password, result[0].Password);
         if(isValidPassword) {
+            const token = auth.newToken(result);
             const response = [
                 {
                     userId: result[0].userID,
                     userName: result[0].Username,
-                    userType: result[0].UserType
+                    userType: result[0].UserType,
+                    authToken: token
                 }
             ];
             cb(err, response);
