@@ -8,4 +8,14 @@ function newToken(user) {
     user.js model file, in stroongSignIn gunction inside sql query we are selecting ID of user as userID */
 }
 
-module.exports = {newToken};
+function verifyToken(token) {
+    try {
+        let response = jwt.verify(token, 'shhhhh');
+        return response;
+    } catch(err) {
+        console.log(err);
+        return;
+    }
+}
+
+module.exports = {newToken, verifyToken};

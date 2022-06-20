@@ -88,5 +88,15 @@ function strongSignIn(data, cb) {
     });
 }
 
+function getUserById(id, cb) {
+    let sql = `select ID as userID, Username, UserType
+               from users
+               where ID = ?`;
+    let values = [];
+    values.push(id);
+    sqlConnection.executeQuery(sql, values, function(err, result) {
+        cb(err, result);
+    });
+}
 
-module.exports = {signUp, strongSignUp, getUserSignupDetails, login, strongSignIn};
+module.exports = {signUp, strongSignUp, getUserSignupDetails, login, strongSignIn, getUserById};

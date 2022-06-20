@@ -1,4 +1,5 @@
 const user = require('../models/user');
+const auth = require('../util/auth');
 
 function signUp(req, res) {
     let data = req.body;
@@ -66,4 +67,22 @@ function login(req, res) {
 
 }
 
-module.exports = {signUp, login};
+
+function isAuthenticated(req, res, next) { // we are passing next parameter in order to execute function placed in next position(this is a middle ware concept) 
+    const token = req.headers.auth; // we are going to get token from header of api request
+    let response;
+    try {
+        response = auth.verifyToken(token);
+    } catch(err) {
+        console.log(err);
+        return res.status(401).send({msg: "Invalid token"});
+    }
+    user.getUserById(response.id, function(err, result) { // id we are getting from newToken method of auth.js
+        if(err) {
+            return res.status(401).send({message: "Invalid user"});
+        }
+        req.user = result; // we are going to store user object returned by getUserById function in request.user parameter
+        next(); // at the end we are going to execute the function which is passed as a parameter(next) to the fuction isAuthenticated
+    }); 
+}
+module.exports = {signUp, login, isAuthenticated};
