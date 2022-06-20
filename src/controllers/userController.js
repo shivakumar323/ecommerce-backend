@@ -17,7 +17,7 @@ function signUp(req, res) {
                 responseData.msg = "User already exists";
                 return res.status(500).send(responseData);
             } else {
-                user.signUp(data, function(err1, result) {
+                user.strongSignUp(data, function(err1, result) {
                     if(err1) {
                         console.log(err1);
                         return res.status(500).send(responseData);
@@ -45,21 +45,18 @@ function login(req, res) {
         msg: "Invalid details for login please check your login credentials"
     }
     if(data.username && data.password) {
-        user.login(data, function(err, result) {
+        user.strongSignIn(data, function(err, result) {
             if(err) {
                 res.status(500).send(responseData);
             }
             if(result.length == 0) {
                 responseData.msg = "invalid credentials";
+                responseData.isRegisteredUser = false;
                 res.status(500).send(responseData);
             }
             responseData.success = true;
-            responseData.msg = "successfully logged in"
-            responseData.data = {
-                username: result[0].Username,
-                userID: result[0].ID,
-                userType: result[0].UserType
-            };
+            responseData.msg = "successfully logged in";
+            responseData.data = result;
             return res.status(200).send(responseData);
         })
     }
