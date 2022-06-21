@@ -69,7 +69,6 @@ function strongSignIn(data, cb) {
     values.push(data.username);
 
     sqlConnection.executeQuery(sql, values, function(err, result) {
-        console.log(result);
         const isValidPassword = bcrypt.compareSync(data.password, result[0].Password);
         if(isValidPassword) {
             const token = auth.newToken(result);
