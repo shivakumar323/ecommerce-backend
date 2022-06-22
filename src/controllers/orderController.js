@@ -86,4 +86,57 @@ function listOrders(req, res) {
     })
 }
 
-module.exports = {listOrders, createOrder};
+function editOrder(req, res) {
+    let data = req.body;
+    let responseData = {
+        msg: "Invalid params for updating orders",
+        success: false
+    };
+    if(data.orderId && data.userId && data.productId) {
+        product.getProductDetails(data, function(err, result) {
+            if(err) {
+                return res.status(500).send(responseData);
+            }
+            if(data.remove) {
+                orders.getOrderDetails(data, function(err1, result1) {
+                    if(err1) {
+                        return res.status(500).send(responseData);
+                    }
+                    orderitem.editOrderItem(data, function(err2, result2) {
+                        if(err2) {
+                            return res.status(500).send(responseData);
+                        }
+                        data.total = result1[0].total - result[0].price * parseInt(data.quantity, 10);
+                        orders.editOrder(data, function(err3, result3) {
+                            if(err3) {
+                                return res.status(500).send(responseData);
+                            }
+                            responseData.success = true;
+                            responseData.msg = "successfully updaed order";
+                            return res.status(200).send(responseData);
+                        })
+                    })
+                })
+            } else {
+                orderitem.editOrderItem(data, function(err2, result2) {
+                    if(err2) {
+                        return res.status(500).send(responseData);
+                    }
+                    let productTotal = 0;
+                    result1.forEach(item => {
+                        if(item.productId == data.productId) {
+                            productTotal += item.price * item.quantity;
+                        }
+                        data.total = result1[0].total - productTotal + (parseInt(data.quantity, 10) * result[0].price);
+                    });
+                })
+            }
+            
+
+        })
+    } else {
+        return res.status(400).send(responseData);
+    }
+}
+
+module.exports = {listOrders, createOrder, editOrder};
