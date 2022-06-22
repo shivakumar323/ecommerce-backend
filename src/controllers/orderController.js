@@ -9,7 +9,6 @@ function createOrder(req, res) {
         msg: "invalid params for creating order"
     };
     if(data.userId && data.productId) {
-        data.quantity = 1; // for time being hardcoding it
         product.getProductDetails(data, function(err, result) { // we are getting product details which are present in the cart
             if(err) {
                 responseData.msg = "Error in creating order";
@@ -17,13 +16,14 @@ function createOrder(req, res) {
             }
             orders.findOrderByUser(data, function(err1, result1) {
                 if(err1) {
+                    console.log(err1);
                     responseData.msg = "Error in creating the order";
                     return res.status(500).send(responseData);
                 }
                 if(result1.length > 0) {
-                    data.total = parseInt(result1[0].total, 10) + parseInt(result[0].price, 10);
-                    data.quantity += 1;
+                    data.total = parseInt(result1[0].total, 10) + data.quantity * parseInt(result[0].price, 10);
                     data.orderId = result1[0].orderId;
+                    data.quantity += result1[0].quantity;
                     orders.editOrder(data, function(err2, result2) {
                         if(err2) {
                             responseData.msg = "Error in creating order";
@@ -31,6 +31,7 @@ function createOrder(req, res) {
                         }
                         orderitem.editOrderItem(data, function(err3, result3) {
                             if(err3) {
+                                console.log(err3);
                                 responseData.msg = "Error in creating the order";
                                 return res.status(500).send(responseData);
                             }
@@ -43,7 +44,7 @@ function createOrder(req, res) {
                         });
                     }); 
                 } else {
-                    data.total = parseInt(result[0].price, 10);
+                    data.total = parseInt(result[0].price, 10) * data.quantity;
                     orders.addOrder(data, function(err2, result2) {
                         if(err2) {
                             responseData.msg = "Error in creating The order";

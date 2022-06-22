@@ -17,9 +17,9 @@ function listOrders(data, cb) {
 
 
 function findOrderByUser(data, cb) {
-    var sql = `select ID as orderId, Total as total 
-               from orderdetails 
-               where UserId = ? and OrderStatus = 1
+    var sql = `select od.ID as orderId, od.Total as total, oi.Quantity as quantity 
+               from orderdetails od left join orderitems as oi on od.ID = oi.OrderID
+               where UserId = ? and OrderStatus = 1 
                LIMIT 1`;
     var values = [];
     values.push(data.userId);
