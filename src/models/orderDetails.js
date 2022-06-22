@@ -8,7 +8,7 @@ function listOrders(data, cb) {
 
     if(data.userID) {
         sql += " where od.UserID = ?";
-        values.push(data.userID);
+        values.push(data.userId);
     }
     sqlConnection.executeQuery(sql, values, function(err, result) {
         cb(err, result);
@@ -22,7 +22,7 @@ function findOrderByUser(data, cb) {
                where UserId = ? and OrderStatus = 1
                LIMIT 1`;
     var values = [];
-    values.push(data.userid);
+    values.push(data.userId);
     sqlConnection.executeQuery(sql, values, function(err, result) {
         cb(err, result);
     });
@@ -31,10 +31,10 @@ function findOrderByUser(data, cb) {
 function addOrder(data, cb) {
     var sql = `insert into orderdetails
                (Total, UserID, OrderStatus, CreatedAt, UpdatedAt) 
-               values(?, ?, 1, now(). now())`; 
+               values(?, ?, 1, now(), now())`; 
     var values = [];
     values.push(data.total);
-    values.push(data.userid);  
+    values.push(data.userId);  
     sqlConnection.executeQuery(sql, values, function(err, result) {
         cb(err, result);
     }); 
@@ -55,7 +55,7 @@ function editOrder(data, cb) {
         values.push(data.total);
         values.push(1);
     }
-    values.push(data.orderid);
+    values.push(data.orderId);
     sqlConnection.executeQuery(sql, values, function(err, result) {
         cb(err, result);
     });
@@ -69,7 +69,7 @@ function getOrderDetails(data, cb) {
                left join products as p on oi.ProductID = p.ID
                where od.UserID = ? and od.OrderStatus = 1`;
     var values = [];
-    values.push(data.userid);
+    values.push(data.userId);
     sqlConnection.executeQuery(sql, values, function(err, result) {
         cb(err, result);
     });

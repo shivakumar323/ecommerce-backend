@@ -44,11 +44,11 @@ function addProduct(data, cb) {
 }
 
 function getProductDetails(data, cb) { // this function checks for a given product and user, if the product is added to given user cart or not 
-    var sql = `p.NAME as name, p.Description as description, p.Price as price, 
+    var sql = `select p.NAME as name, p.Description as description, p.Price as price, 
                if((select count(*) from orderdetails as od left join orderitems as oi 
                on od.ID = oi.OrderID 
                where oi.ProductID = p.ID and od.UserID = ? and od.OrderStatus = 1) > 0, 1, 0) as addedToCart
-               from products as p where p.ID = ? and LIMIT 1`;
+               from products as p where p.ID = ?`;
     var values = [];
     values.push(data.userId);
     values.push(data.productId);

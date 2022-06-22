@@ -2,7 +2,7 @@ const sqlConnection = require('../services/sqlConnection');
 
 function addOrderItem(data, cb) {
     var sql = `insert into orderitems
-               (OrderID, ProductID, Quantity, CreatedAat, UpdatedAt) 
+               (OrderID, ProductID, Quantity, CreatedAt, UpdatedAt) 
                values(?, ?, ?, now(), now())`;
     var values = [];
     values.push(data.orderId);
