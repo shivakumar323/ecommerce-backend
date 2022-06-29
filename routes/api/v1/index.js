@@ -11,6 +11,7 @@ router.post("/product/add", userController.isAuthenticated, productController.ad
 router.post("/order/all", orderController.listOrders);
 router.post("/user/signup", userController.signUp);
 router.post("/user/signin", userController.login);
+router.post("/user/changepassword", userController.changePassword);
 router.post("/order/add", orderController.createOrder);
 router.post("/order/edit", orderController.editOrder);
 

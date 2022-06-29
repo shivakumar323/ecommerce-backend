@@ -85,4 +85,24 @@ function isAuthenticated(req, res, next) { // we are passing next parameter in o
         next(); // at the end we are going to execute the function which is passed as a parameter(next) to the fuction isAuthenticated
     }); 
 }
-module.exports = {signUp, login, isAuthenticated};
+
+function changePassword(req, res) {
+    let data = req.body;
+    let responseData = {
+        success: false,
+        message: "error in changing password"
+    };
+    if(data.password && data.userid) {
+        user.changePassword(data, function(err, result) {
+            if(err) {
+                console.log(err);
+                res.status(500).send(responseData);
+            }
+            responseData.message = "Successfully changed the password";
+            responseData.success = true;
+            res.status(200).send(responseData);
+        })
+    }
+}
+
+module.exports = {signUp, login, isAuthenticated, changePassword};

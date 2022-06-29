@@ -98,4 +98,21 @@ function getUserById(id, cb) {
     });
 }
 
-module.exports = {signUp, strongSignUp, getUserSignupDetails, login, strongSignIn, getUserById};
+function changePassword(data, cb) {
+    var sql = `update users set Password = ?, UpdatedAt = now() 
+               where ID = ?`;
+    var values = [];
+    bcrypt.hash(data.password, 8, function(err, hash) {
+        if(err) {
+            console.log(err);
+            return
+        }
+        values.push(hash);
+        values.push(data.userid);
+        sqlConnection.executeQuery(sql, values, function(err, result) {
+            cb(err, result);
+        });
+    })
+}
+
+module.exports = {signUp, strongSignUp, getUserSignupDetails, login, strongSignIn, getUserById, changePassword};
